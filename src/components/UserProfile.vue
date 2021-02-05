@@ -17,11 +17,11 @@
             <div class="user-profile__follower-count">
                 <strong> Followers: </strong> {{ followers }}
             </div>
-            <form class="user-profile__create-item">
+            <form class="user-profile__create-item" @submit.prevent="createNewItem">
                 <br>
                 <label for="newItem"><strong> New Item </strong></label>
                 <!-- the txt entered is synced up using v-model -->
-                <textarea id="newItem" rows="3" v-model="newItemConent"/>
+                <textarea id="newItem" rows="3" v-model="newItemContent"/>
 
                 <div class="user-profile__create-item-type">
                     <label for="newItemType"><strong> Type: </strong></label>
@@ -100,6 +100,15 @@ export default {
         },
         toggle(id) {
             alert(`You clicked  id  ${id}`)
+        },
+        createNewItem() {
+            if (this.newItemContent && this.selectedItemType !== 'draft') {
+                this.user.someList.unshift({
+                    id: this.user.someList.length + 1,
+                    content: this.newItemContent
+                })
+            this.newItemContent = ''
+            }
         }
     },
     mounted() {
