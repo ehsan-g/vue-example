@@ -17,10 +17,36 @@
             <div class="user-profile__follower-count">
                 <strong> Followers: </strong> {{ followers }}
             </div>
+            <form class="user-profile__create-item">
+                <br>
+                <label for="newItem"><strong> New Item </strong></label>
+                <!-- the txt entered is synced up using v-model -->
+                <textarea id="newItem" rows="3" v-model="newItemConent"/>
+
+                <div class="user-profile__create-item-type">
+                    <label for="newItemType"><strong> Type: </strong></label>
+                    <select id="newItemType" v-model="selectedItemType">
+                        <option :value="option.value" v-for="(option, index) in itemTypes" :key="index" >
+                            {{ option.name }}
+                        </option>
+                    </select>
+                </div>
+                       
+                <button>
+                    Click Me
+                </button>
+            </form>
         </div>
         <div user-profile__wrapper style="max-width: 700px">
             <!-- for a list we always need an id and we are passing some props at the end -->
-            <Items class="user-profile__item" v-for="item in user.someList" :key="item.id" :username="user.username" :item="item" />
+            <!-- emited click from childis received -->
+            <Items 
+            class="user-profile__item" 
+            v-for="item in user.someList" 
+            :key="item.id" 
+            :username="user.username" 
+            :item="item" 
+            @favorite="toggle" />
         </div>
         
     </div>
@@ -34,6 +60,14 @@ export default {
     components: { Items },
     data() {
         return {
+            newItemContent: '',
+            // the default for type
+            selectedItemType: 'final',
+            itemTypes: [
+                { value: 'draft', name:'Draft'},
+                { value: 'final', name:'Final'}
+            ],
+
             followers: 0,
             user: {
                 id: 1,
@@ -63,6 +97,9 @@ export default {
     methods: {
         followUser() {
             this.followers++;
+        },
+        toggle(id) {
+            alert(`You clicked  id  ${id}`)
         }
     },
     mounted() {
@@ -99,5 +136,16 @@ export default {
 
 h1 {
     margin: 0;
+}
+
+.user-profile__wrapper {
+    display: grid;
+    grid-gap: 10px;
+}
+
+.user-profile__create-item {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
 }
 </style>
